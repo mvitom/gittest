@@ -1,128 +1,124 @@
-import customtkinter 
-import time
-
+import customtkinter
+import command
 
 customtkinter.set_appearance_mode("dark")
 customtkinter.set_default_color_theme("green")
+fontname=("TkHeadingFont", 20)
 
-class LoginFrame(customtkinter.CTkFrame):
-    def login_check(self):
-            if self.jmeno_e.get()=="michal" and self.heslo_e.get()=="heslo":
-                print("spravne")
-                self.progressbar_iteration()
-            else:
-                print("spatne jmeno nebo heslo")
-    def progressbar_iteration(self):
-        while (self.progressbar.get())<100:
-            self.progressbar.set(25)
-            time.sleep(1)
-            self.progressbar.set(50)
-            time.sleep(1)
-            self.progressbar.set(75)
-            time.sleep(1)
-            self.progressbar.set(100)
-
-    def __init__(self, *args, header_name="LoginFrame", **kwargs):
+class Channel(customtkinter.CTkFrame):
+    def __init__(self,*args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self.header_name = header_name
-
-        self.header = customtkinter.CTkLabel(self, text=self.header_name)
-        self.header.grid(row=0, column=0, padx=10, pady=10)
-        self.jmeno_e = customtkinter.CTkEntry(self,placeholder_text="jmeno")
-        self.jmeno_e.grid(row=1, column=0, padx=5, pady=10)
-        self.heslo_e = customtkinter.CTkEntry(self,placeholder_text="heslo",show="*")
-        self.heslo_e.grid(row=2, column=0, padx=5, pady=10)
-        self.login_button = customtkinter.CTkButton(self,text="Login",command=self.login_check)
-        self.login_button.grid(row=3, column=0, padx=5, pady=10)
-        self.progressbar = customtkinter.CTkProgressBar(self,mode="determinate")
-        self.progressbar.grid(row=4,column=0,padx=10,pady=(10,10))
+        self.set_label = customtkinter.CTkLabel(self,text="Channel1:",font=fontname)
+        self.set_label.grid(row=0,column=0,sticky="nsew")
+        #voltage
+        self.volt_label = customtkinter.CTkLabel(self,text="Voltage:",font=fontname)
+        self.volt_label.grid(row=1,column=0,sticky="w")
         
-
-class AccountsFrameEdit(customtkinter.CTkFrame):
-    def __init__(self, *args, header_name="AccountsFrameEdit", **kwargs):
-        super().__init__(*args, **kwargs)
-        self.header_name = header_name
-
-        self.header = customtkinter.CTkLabel(self, text=self.header_name,width=400)
-        self.header.grid(row=0, column=0, padx=10, pady=5)
-
-class AccountsFrame(customtkinter.CTkFrame):
-    def __init__(self, *args, header_name="AccountsFrame", **kwargs):
-        super().__init__(*args, **kwargs)
-        self.header_name = header_name
-
-        self.header = customtkinter.CTkLabel(self, text=self.header_name,width=400)
-        self.header.grid(row=0, column=0, padx=10, pady=5)
-
-        self.textbox = customtkinter.CTkTextbox(self)
-        self.textbox.grid(row=1, column=0, padx=10, pady=10,sticky="nsew")
+        self.set_volt_e = customtkinter.CTkEntry(self,placeholder_text="(min-0.01)")
+        self.set_volt_e.grid(row=1,column=1,sticky="",padx=0,pady=5)
+        #current
+        self.cur_label = customtkinter.CTkLabel(self,text="Current:",font=fontname)
+        self.cur_label.grid(row=2,column=0,sticky="w")
         
-        self.textbox.insert("0.0", "Some example text!\n" * 50)
+        self.set_cur_e = customtkinter.CTkEntry(self,placeholder_text="(min-)")
+        self.set_cur_e.grid(row=2,column=1,sticky="",padx=0,pady=5)
+        #limitV
+        self.limV_label = customtkinter.CTkLabel(self,text="V-Limit:",font=fontname)
+        self.limV_label.grid(row=3,column=0,sticky="w")
+        
+        self.set_limV_e = customtkinter.CTkEntry(self,placeholder_text="(min-)")
+        self.set_limV_e.grid(row=3,column=1,sticky="",padx=0,pady=5)
+        #limitC
+        self.limC_label = customtkinter.CTkLabel(self,text="C-Limit:",font=fontname)
+        self.limC_label.grid(row=4,column=0,sticky="w")
+        
+        self.set_limC_e = customtkinter.CTkEntry(self,placeholder_text="(min-)")
+        self.set_limC_e.grid(row=4,column=1,sticky="",padx=0,pady=5)
+
+
+
+
 
 
 class App(customtkinter.CTk):
     def __init__(self):
         super().__init__()
 
-        self.geometry("700x300")
-        self.title("My Accounts app")
-
-        self.login_frame = LoginFrame(self, header_name="LoginFrame")
-        self.login_frame.grid(row=0, column=0, padx=20, pady=5)
-        
-        self.accounts_frame = AccountsFrame(self,header_name="AccountsFrame")
-        self.accounts_frame.grid(row=0,column=1,padx=20,pady=20)
-        # self.frame_1_button = customtkinter.CTkButton(self, text="Print value of frame 1", command=self.print_value_frame_1)
-        # self.frame_1_button.grid(row=1, column=0, padx=20, pady=10)
-        #self.login_button = customtkinter.CTkButton(self,text="Login",command=self.login_check)
-        #self.login_button.grid(row=1, column=0, padx=20, pady=10)
-
-
+        self.geometry("800x400")
+        self.title("Nastaveni zdroje")
+        self.output_label = customtkinter.CTkLabel(self,text="Output:",font=fontname)
+        self.output_label.grid(row=0,column=0)
+        self.textbox = customtkinter.CTkTextbox(self,height=120,width=250)
+        self.textbox.grid(row=1, column=0,columnspan=3, padx=5, pady=5,sticky="nsew")
+        #ch1
+        self.frame_ch1 = Channel(self,width=80,height=150)
+        self.frame_ch1.grid(row=2,column=0,padx=10,pady=10)
+        self.set_button_ch1 = customtkinter.CTkButton(self,text="SET",width=100,fg_color="red",command=self.set_ch1)
+        self.set_button_ch1.grid(row=3,column=0,sticky="w",padx=5)
+        self.get_button_ch1 = customtkinter.CTkButton(self,text="GET",width=100)
+        self.get_button_ch1.grid(row=3,column=0,padx=30,pady=5,sticky="e")
+        #ch2
+        self.frame_ch2 = Channel(self,width=80,height=150)
+        self.frame_ch2.grid(row=2,column=1,padx=10,pady=10)
+        self.set_button_ch2 = customtkinter.CTkButton(self,text="SET",width=100,fg_color="red")
+        self.set_button_ch2.grid(row=3,column=1,sticky="w",padx=5)
+        self.get_button_ch2 = customtkinter.CTkButton(self,text="GET",width=100)
+        self.get_button_ch2.grid(row=3,column=1,padx=30,pady=5,sticky="e")
+        #ch3
+        self.frame_ch3 = Channel(self,width=80,height=150)
+        self.frame_ch3.grid(row=2,column=2,padx=10,pady=10)
+        self.set_button_ch3 = customtkinter.CTkButton(self,text="SET",width=100,fg_color="red")
+        self.set_button_ch3.grid(row=3,column=2,sticky="w",padx=5)
+        self.get_button_ch3 = customtkinter.CTkButton(self,text="GET",width=100)
+        self.get_button_ch3.grid(row=3,column=2,padx=30,pady=5,sticky="e")
+     
+    def set_ch1(self):
+        #channel = 1
+        volt = int(self.frame_ch1.set_volt_e.get())
+        cur = int(self.frame_ch1.set_cur_e.get())
+        limV = int(self.frame_ch1.set_limV_e.get())
+        limC = int(self.frame_ch1.set_limC_e.get())
+        #print(volt,cur,limV,limC) 
 
     
-    # def print_value_frame_1(self):
-    #     print(f"Frame 1 value: {self.radio_button_frame_1.get_value()}")
+        import socket
+        host = "192.168.40.71"  # as both code is running on same pc
+        port = 5000  # socket server port number
+
+        client_socket = socket.socket()  # instantiate
+        client_socket.connect((host, port))  # connect to the server
+
+        message = command.set_channel(volt,cur,limV,limC)  # take input
+
+        while message.lower().strip() != 'bye':
+            client_socket.send(message.encode())  # send message
+            data = client_socket.recv(1024).decode()  # receive response
+
+            print('Received from server: ' + data)  # show in terminal
+
+            message = input(" -> ")  # again take input
+
+        client_socket.close()  # close the connection
+
+
+# def set_voltage(channel,voltage):
+#     channel =1
+#     channel = f"SET CH{channel}"
+#     current = f";SET VOLT {current}"
+#     return channel + current
+
+# def set_current(channel,current):
+#     channel =1
+#     channel = f"SET CH{channel}"
+#     current = f";SET CUR {current}"
+#     return channel + current
+
 
 
 if __name__ == "__main__":
     app = App()
+    #app.channel1()
+    #app.channel2()
+    #app.channel3()
     app.mainloop()
- 
-"""def progressbar_iteration():
-        progressbar.set(25)
-        time.sleep(0.1)
-        progressbar.set(50)
-        time.sleep(0.1)
-        progressbar.set(75)
-        time.sleep(0.1)
-        progressbar.set(100)
-
-
-
-def slidebar_callback(value):
-    progressbar.set(value)
-
-
-frame1 = ct.CTkFrame(master=root)
-frame1.pack(padx=20,pady=20,expand=True,fill="both")
-
-
-
-label = ct.CTkLabel(frame1,text="Login system",font=(0,24))
-label.pack(pady=12,padx=10)
-
-jmeno_e = ct.CTkEntry(frame1,placeholder_text="jmeno")
-heslo_e = ct.CTkEntry(frame1,placeholder_text="heslo",show="*")
-for entry in (jmeno_e,heslo_e):
-    entry.pack(pady=12,padx=10)
-
-login_button = ct.CTkButton(frame1,text="Login",command=login_check)
-login_button.pack(pady=12,padx=10)
-
-progressbar = ct.CTkProgressBar(frame1,mode="determinate")
-progressbar.pack(pady=12,padx=10)
-slidebar = ct.CTkSlider(frame1,command=slidebar_callback).pack(pady=12,padx=10)
-
-"""
-
